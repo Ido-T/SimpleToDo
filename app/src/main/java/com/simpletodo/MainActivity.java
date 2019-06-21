@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> items  ;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
-
+    String message = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,27 +53,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddItem(View v){
+
+
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
-        etNewItem.setText("");
-        writeItems();
-        Toast.makeText(getApplicationContext(), "Item added to list", Toast.LENGTH_SHORT).show();
+
+        if(etNewItem.getText().toString().isEmpty()){
+            message = " Please Enter an Item  ";
+        }else {
+
+            String itemText = etNewItem.getText().toString();
+
+            itemsAdapter.add(itemText);
+            etNewItem.setText("");
+            writeItems();
+            message ="Item added to list";
+        }
+        Toast.makeText(this, "" + message, Toast.LENGTH_SHORT).show();
+
     }
 
     private void setupListViewListener (){
-    Log.i("MainActivity", "set up listener on List View");
+   // Log.i("MainActivity", "set up listener on List View");
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.i("MainActivity", "item removed from list: " +position);
+                message = "Item Deleted ";
+                Toast.makeText(MainActivity.this, ""+ message, Toast.LENGTH_SHORT).show();
+
+
                 items.remove(position);
+
+
                 itemsAdapter.notifyDataSetChanged();
+                Log.i("what", "Deleted");
+
                 writeItems();
                 return true;
             }
-        });
+
+                     });
 
         // set up item listener for edit (Regular click)
 
